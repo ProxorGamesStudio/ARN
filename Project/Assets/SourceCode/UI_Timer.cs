@@ -20,7 +20,7 @@ public class UI_Timer : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-
+        print(Time.timeScale);
         _Time = _Time.AddMinutes(Time.deltaTime * TimeFactor);
         TimeUI.text = _Time.ToString("HH:mm:ss");
         DateUI.text = _Time.Day.ToString() + months[_Time.Month];
@@ -46,7 +46,7 @@ public class UI_Timer : MonoBehaviour {
 
     public void Play(float TimeScale)
     {
-        if(Time.timeScale == 0)
+        if (Time.timeScale == 0)
         {
             effectTargetValue = 0;
             startEffectPlay = true;
