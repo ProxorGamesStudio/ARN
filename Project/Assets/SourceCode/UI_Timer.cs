@@ -33,7 +33,7 @@ public class UI_Timer : MonoBehaviour {
         }
         if(startEffectPlay)
         {
-            PauseIcon.color = Color.Lerp(PauseIcon.color, new Color(PauseIcon.color.r, PauseIcon.color.g, PauseIcon.color.b, 0), 0.07f);
+            PauseIcon.color = Color.Lerp(PauseIcon.color, new Color(PauseIcon.color.r, PauseIcon.color.g, PauseIcon.color.b, 0), 0.14f);
             PlayIcon.transform.localScale = Vector3.Lerp(PlayIcon.transform.localScale, new Vector3(1, 1, 1), 0.16f);
             if (PlayIcon.transform.localScale.x > 1.5f && !backPlay)
                 PlayIcon.color = Color.Lerp(PlayIcon.color, new Color(PlayIcon.color.r, PlayIcon.color.g, PlayIcon.color.b, 1), 0.05f);

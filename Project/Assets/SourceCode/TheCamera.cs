@@ -53,10 +53,10 @@ public class TheCamera : MonoBehaviour {
                 if (_x < 0)
                 {
                     _x += zoomSensivity;
-                    _ux -= zoomSensivity * 1.6f;
+                    _ux -= zoomSensivity * 0.73f;
                     _uScale += zoomSensivity * 0.007f;
                     _z += zoomSensivity * 2;
-                    _uA -= 0.14f;
+                    _uA -= zoomSensivity * 0.014f;
                 }          
             }
             if (Input.GetAxis("Mouse ScrollWheel") < 0)
@@ -64,10 +64,10 @@ public class TheCamera : MonoBehaviour {
                 if (_x > -108)
                 {
                     _x -= zoomSensivity;
-                    _ux += zoomSensivity * 1.6f;
+                    _ux += zoomSensivity * 0.73f;
                     _uScale -= zoomSensivity * 0.007f;
                     _z -= zoomSensivity * 2;
-                    _uA += 0.14f;
+                    _uA += zoomSensivity * 0.014f;
                 }
             }
         }
