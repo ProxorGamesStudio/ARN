@@ -20,7 +20,6 @@ public class UI_Timer : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        print(Time.timeScale);
         _Time = _Time.AddMinutes(Time.deltaTime * TimeFactor);
         TimeUI.text = _Time.ToString("HH:mm:ss");
         DateUI.text = _Time.Day.ToString() + months[_Time.Month];
