@@ -30,7 +30,7 @@ public class EarthGraphical : MonoBehaviour {
          else
         {
             material.SetVector("_MousePosition", new Vector4(0, hit.point.y, 0, 0));
-         //   Ring.gameObject.SetActive(false);
+            Ring.gameObject.SetActive(false);
         }
     }
 }
