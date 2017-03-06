@@ -7,7 +7,7 @@
 		_DispTex("Disp Texture", 2D) = "gray" {}
 		_Displacement("Сила хаймпы", Range(0, 50)) = 25
 		_Brigtness("Яркость", Range(0,4)) = 1.0
-		_Contrast("Контраст", Range(0,4)) = 1.0
+		_Contrast("Контраст", Range(0,5)) = 1.0
 		_Saturation("Насыщенность", Range(0,1)) = 1.0
 		_RimColor("Цвет подсветки", Color) = (0.26,0.19,0.16,0.0)
 		_RimPower("Глубина подсветки", Range(0,8.0)) = 3.0
