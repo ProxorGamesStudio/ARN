@@ -1,41 +1,117 @@
-﻿Shader "Custom/HubDowndisk" {
-	Properties {
-		_Color ("Color", Color) = (1,1,1,1)
-		_MainTex ("Albedo (RGB)", 2D) = "white" {}
-		_Glossiness ("Smoothness", Range(0,1)) = 0.5
-		_Metallic ("Metallic", Range(0,1)) = 0.0
+﻿Shader "Proxor/Downdisk" {
+	Properties{
+		_TintColor("Tint Color", Color) = (0.5,0.5,0.5,0.5)
+		_MainTex("Particle Texture", 2D) = "white" {}
+	_InvFade("Soft Particles Factor", Range(0.01,3.0)) = 1.0
+		_speed("Rotation Speed", float) = 1.0
 	}
-	SubShader {
-		Tags { "RenderType"="Opaque" }
-		LOD 200
-		
-		CGPROGRAM
-		// Physically based Standard lighting model, and enable shadows on all light types
-		#pragma surface surf Standard fullforwardshadows
 
-		// Use shader model 3.0 target, to get nicer looking lighting
-		#pragma target 3.0
+		Category{
+		Tags{ "Queue" = "Transparent" "IgnoreProjector" = "True" "RenderType" = "Transparent" }
+		Blend SrcAlpha One
+		AlphaTest Greater .01
+		ColorMask RGB
+		Cull Off Lighting Off ZWrite Off Fog{ Color(0,0,0,0) }
+		BindChannels{
+		Bind "Color", color
+		Bind "Vertex", vertex
+		Bind "TexCoord", texcoord
+	}
+
+		// ---- Fragment program cards
+		SubShader{
+		Pass{
+
+		CGPROGRAM
+#pragma vertex vert
+#pragma fragment frag
+#pragma fragmentoption ARB_precision_hint_fastest
+#pragma multi_compile_particles
+
+#include "UnityCG.cginc"
 
 		sampler2D _MainTex;
+	fixed4 _TintColor;
+	float _speed;
+	uniform float4 _TimeEditor;
 
-		struct Input {
-			float2 uv_MainTex;
-		};
+	struct appdata_t {
+		float4 vertex : POSITION;
+		fixed4 color : COLOR;
+		float2 texcoord : TEXCOORD0;
+	};
 
-		half _Glossiness;
-		half _Metallic;
-		fixed4 _Color;
+	struct v2f {
+		float4 vertex : POSITION;
+		fixed4 color : COLOR;
+		float2 texcoord : TEXCOORD0;
+#ifdef SOFTPARTICLES_ON
+		float4 projPos : TEXCOORD1;
+#endif
+	};
 
-		void surf (Input IN, inout SurfaceOutputStandard o) {
-			// Albedo comes from a texture tinted by color
-			fixed4 c = tex2D (_MainTex, IN.uv_MainTex) * _Color;
-			o.Albedo = c.rgb;
-			// Metallic and smoothness come from slider variables
-			o.Metallic = _Metallic;
-			o.Smoothness = _Glossiness;
-			o.Alpha = c.a;
-		}
+	float4 _MainTex_ST;
+
+	v2f vert(appdata_t v)
+	{
+		v2f o;
+		o.vertex = mul(UNITY_MATRIX_MVP, v.vertex);
+#ifdef SOFTPARTICLES_ON
+		o.projPos = ComputeScreenPos(o.vertex);
+		COMPUTE_EYEDEPTH(o.projPos.z);
+#endif
+		o.color = v.color;
+		o.texcoord = TRANSFORM_TEX(v.texcoord,_MainTex);
+		return o;
+	}
+
+	sampler2D _CameraDepthTexture;
+	float _InvFade;
+
+	fixed4 frag(v2f i) : COLOR
+	{
+#ifdef SOFTPARTICLES_ON
+		float sceneZ = LinearEyeDepth(UNITY_SAMPLE_DEPTH(tex2Dproj(_CameraDepthTexture, UNITY_PROJ_COORD(i.projPos))));
+	float partZ = i.projPos.z;
+	float fade = saturate(_InvFade * (sceneZ - partZ));
+	i.color.a *= fade;
+	
+#endif
+	half4 mask = length(i.texcoord * 2 - 1);
+	mask = 1 - step(1, mask);
+
+	float ang = (_Time + _TimeEditor).g;
+	float _cos = cos(_speed * ang);
+	float _sin = sin(_speed * ang);
+	float2 _piv = float2(0.5,0.5);
+	float2 _uv = (mul(i.texcoord - _piv, float2x2(_cos, -_sin, _sin, _cos)) + _piv);
+	return 2.0f * i.color * _TintColor * tex2D(_MainTex, _uv) * mask;
+
+	}
 		ENDCG
 	}
-	FallBack "Diffuse"
+	}
+
+		// ---- Dual texture cards
+		SubShader{
+		Pass{
+		SetTexture[_MainTex]{
+		constantColor[_TintColor]
+		combine constant * primary
+	}
+		SetTexture[_MainTex]{
+		combine texture * previous DOUBLE
+	}
+	}
+	}
+
+		// ---- Single texture cards (does not do color tint)
+		SubShader{
+		Pass{
+		SetTexture[_MainTex]{
+		combine texture * primary
+	}
+	}
+	}
+	}
 }

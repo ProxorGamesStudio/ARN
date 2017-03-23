@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EarthModes : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
+public class EarthModes : MonoBehaviour {
+     
+	
+	void Start()
+	{
 		
 	}
 	
