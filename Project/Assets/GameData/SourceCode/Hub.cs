@@ -8,7 +8,7 @@ public class Hub : MonoBehaviour {
     Hub_Manager hub_manager;
     public string Name;
     public int Level = 1;
-    public enum type { Deafult, Scientific, Millitary, Commercial }
+    public enum type { Common, Scientific, Millitary, Commercial, Goverment }
     public type Type;
     //[HideInInspector]
     public GameObject[] lines;

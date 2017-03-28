@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class Hub_Manager : MonoBehaviour {
 
     [HideInInspector]
-    public bool open;
+    public bool open, opened;
     public float speed;
     Vector2 OpenPoseSmall, OpenPoseBig, OpenScaleSmall, OpenScaleBig, pos;
     public RectTransform hubMenu;
@@ -33,6 +33,11 @@ public class Hub_Manager : MonoBehaviour {
 
         if (open)
         {
+            if (!opened)
+            {
+                opened = true;
+                hubMenu.position = pos;
+            }
             hubMenu.position = Vector2.Lerp(hubMenu.position, OpenPoseSmall, Time.deltaTime * speed);
             hubMenu.localScale = Vector2.Lerp(hubMenu.localScale, OpenScaleSmall, Time.deltaTime * speed);
             foreach (Image img in imgs)
@@ -42,6 +47,7 @@ public class Hub_Manager : MonoBehaviour {
         }
         else
         {
+            opened = false;
             hubMenu.position = Vector2.Lerp(hubMenu.position, pos, Time.deltaTime * speed * 2.4f);
             hubMenu.localScale = Vector2.Lerp(hubMenu.localScale, Vector2.zero, Time.deltaTime * speed * 2);
             foreach (Image img in imgs)
