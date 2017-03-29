@@ -14,6 +14,8 @@ public class Hub_Manager : MonoBehaviour {
     Text[] txts;
     [HideInInspector]
     public Hub TargetHub;
+    GameObject halo;
+    RaycastHit hit;
 
     void Start()
     {
@@ -21,12 +23,27 @@ public class Hub_Manager : MonoBehaviour {
         OpenScaleSmall = hubMenu.localScale;
         imgs = hubMenu.transform.GetComponentsInChildren<Image>();
         txts = hubMenu.transform.GetComponentsInChildren<Text>();
+        halo = GameObject.Find("SelectionHalo");
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(TargetHub != null)
+        if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit) && hit.transform.tag == "Hub")
+        {
+            halo.SetActive(true);
+            halo.transform.parent = hit.transform;
+            halo.transform.localPosition = new Vector3(0.69f, 0.32f, -1.62f);
+            if (Input.GetMouseButtonDown(0) && !Input.GetMouseButtonDown(1))
+            {
+                open = true;
+                TargetHub = hit.transform.GetComponent<Hub>();
+            }
+        }
+        else
+            halo.SetActive(false);
+
+        if (TargetHub != null)
             pos = Camera.main.WorldToScreenPoint(TargetHub.transform.position);
         else
             pos = Camera.main.WorldToScreenPoint(transform.position);
