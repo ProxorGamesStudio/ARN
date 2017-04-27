@@ -1,3 +1,5 @@
+// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
 Shader "Earth"
 {
 	Properties 
@@ -53,7 +55,7 @@ Shader "Earth"
 			vertexOutput vert(vertexInput input) 
 			{
 				vertexOutput output;
-				output.pos = mul(UNITY_MATRIX_MVP, input.pos);
+				output.pos = UnityObjectToClipPos(input.pos);
 				output.uv = input.uv;
 
 				output.diffuse = saturate(dot(_LightDir.xyz, input.normal) * 1.2);

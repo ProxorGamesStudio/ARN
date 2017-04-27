@@ -1,3 +1,5 @@
+// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
 Shader "Atmosphere" 
 {
 	Properties 
@@ -45,7 +47,7 @@ Shader "Atmosphere"
 			vertexOutput vert(vertexInput input) 
 			{
 				vertexOutput output;
-				output.pos = mul(UNITY_MATRIX_MVP, input.pos);
+				output.pos = UnityObjectToClipPos(input.pos);
 				output.normal = input.normal;
 				output.viewDir = ObjSpaceViewDir(input.pos);
 
