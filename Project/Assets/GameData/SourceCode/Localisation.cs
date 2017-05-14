@@ -49,7 +49,7 @@ public class Localisation : MonoBehaviour
             ISheet sheet = book.GetSheetAt(0);
             for(byte i = 1; sheet.GetRow(0).GetCell(i).ToString() != "Описание"; i++)
             lang_ids.Add(sheet.GetRow(2).GetCell(i).ToString());
-            for (int i = 3, k = 0; sheet.GetRow(i).GetCell(0).ToString() != string.Empty; i++)
+            for (int i = 3, k = 0; sheet.GetRow(i) != null && sheet.GetRow(i).GetCell(0).ToString() != string.Empty; i++)
             {
                 Word word = new Word();
                 word.id = sheet.GetRow(i).GetCell(0).ToString();

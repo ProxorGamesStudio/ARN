@@ -14,8 +14,11 @@ public class Hub_Manager : MonoBehaviour {
     Text[] txts;
     [HideInInspector]
     public Hub TargetHub;
-    GameObject halo;
+    GameObject halo, hint;
     RaycastHit hit;
+    public bool on;
+    public float opacity = 0, speedOpadcityPlus, speedOpadcityMinus;
+    Camera mCam;
 
     void Start()
     {
@@ -24,15 +27,21 @@ public class Hub_Manager : MonoBehaviour {
         imgs = hubMenu.transform.GetComponentsInChildren<Image>();
         txts = hubMenu.transform.GetComponentsInChildren<Text>();
         halo = GameObject.Find("SelectionHalo");
+        hint = GameObject.Find("HubHint");
+        mCam = Camera.main;
     }
 
     // Update is called once per frame
     void Update()
     {
+        hint.GetComponent<MeshRenderer>().material.SetFloat("_Opacity", opacity);
+        Hint();
         if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit) && hit.transform.tag == "Hub")
         {
             halo.SetActive(true);
-            halo.transform.parent = hit.transform;
+            halo.transform.parent = hit.transform.GetChild(0);
+            SelectorControl();
+            on = true;
             halo.transform.localPosition = new Vector3(0.69f, 0.32f, -1.62f);
             if (Input.GetMouseButtonDown(0) && !Input.GetMouseButtonDown(1))
             {
@@ -41,7 +50,11 @@ public class Hub_Manager : MonoBehaviour {
             }
         }
         else
+        {
+            on = false;
+           // hint.transform.GetChild(0).gameObject.SetActive(false);
             halo.SetActive(false);
+        }
 
         if (TargetHub != null)
             pos = Camera.main.WorldToScreenPoint(TargetHub.transform.position);
@@ -80,4 +93,21 @@ public class Hub_Manager : MonoBehaviour {
         open = false;
     }
 
+    void SelectorControl()
+    {
+        hint.transform.LookAt(mCam.transform);
+      //  hint.transform.position = halo.transform.position;
+    }
+
+    void Hint()
+    {
+        if (on)
+        {
+            if (opacity < 1)
+                opacity += speedOpadcityPlus;
+        }
+        else
+            if (opacity > 0)
+            opacity -= speedOpadcityMinus;
+    }
 }
