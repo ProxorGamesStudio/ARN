@@ -63,6 +63,7 @@ Shader "Shader Forge/Glitch" {
                 float4 _Mask_var = tex2D(_Mask,TRANSFORM_TEX(i.uv0, _Mask));
                 float node_2065 = (_Mask_var.r*2.0+-1.0);
                 float4 node_9506 = _Time/10 + _TimeEditor;
+				node_9506 = frac(node_9506);
                 float node_3652 = (i.uv0.r+((node_2065*3.14)+node_9506.b));
                 float node_5786 = (i.uv0.g+(node_2065+node_9506.b));
                 float2 node_4414 = lerp(float2(node_3652,sin(node_5786)),i.uv0,_Opacity);

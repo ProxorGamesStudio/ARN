@@ -41,7 +41,7 @@ public class ScrViewControl : MonoBehaviour {
         }
         if(SecondAxis == null)
         {
-            SecondAxis = PointOfView.FindChild("SecondAxis");
+            SecondAxis = PointOfView.Find("SecondAxis");
             if(SecondAxis == null)
             {
                 Debug.LogError("Ошибка инициализации контроля камеры");
