@@ -25,7 +25,8 @@ public class Localisation : MonoBehaviour
     public UnityEngine.Object LocalizationDB;
     Text[] texts;
     List<Text> Texts = new List<Text>();
-    
+    List<string> Text_data = new List<string>();
+
     public void Awake()
     {
         texts = Resources.FindObjectsOfTypeAll<Text>();

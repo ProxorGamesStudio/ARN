@@ -156,4 +156,10 @@ public class MainMenu : MonoBehaviour
                 img.color = new Color(img.color.r, img.color.g, img.color.b, 0);
         }
     }
+
+    public void Quit()
+    {
+        Application.Quit();
+    }
+
 }

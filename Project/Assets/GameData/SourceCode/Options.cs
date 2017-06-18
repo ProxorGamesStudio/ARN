@@ -9,16 +9,19 @@ public class Options : MonoBehaviour {
     [HideInInspector]
     public int currentSettingWindow;
     public Settings settings;
-    public Dropdown windowsMode, vsync, resolution, graphicsQuality;
+    public Dropdown Language, windowsMode, vsync, resolution, graphicsQuality;
     public Slider brightness;
+    public Localisation localisation;
 
     private void Awake()
     {
         if (PlayerPrefs.GetString("Language") == string.Empty || PlayerPrefs.GetString("Language") == null)
             SetOptimalSettings();
+        else
+            LoadSettings();
     }
 
-    void SetOptimalSettings()
+    public void SetOptimalSettings()
     {
         settings.general.Language = Application.systemLanguage.ToString() == "Russian"? "Русский" : "English";
 
@@ -36,11 +39,32 @@ public class Options : MonoBehaviour {
 
         resolution.options.Add(new Dropdown.OptionData(Screen.width + "x" + Screen.height, null));
         resolution.value = resolution.options.Count - 1;
+        
+        SetSettings();
     }
+
+    public void LoadSettings()
+    {
+        settings.general.Language = PlayerPrefs.GetString("Language");
+        SetSettings();
+    }
+
+     public void SetSettings()
+     {
+        localisation.Language = settings.general.Language;
+        Language.value = settings.general.Language == "Русский" ? 1 : 0;
+
+        PlayerPrefs.SetString("Language", settings.general.Language);
+     }
 
     public void SetSettingWindowNum(int num)
     {
         currentSettingWindow = num;
+    }
+
+    void UpdateSettings()
+    {
+        settings.general.Language = Language.options[Language.value].text;
     }
 
   //  IEnumerator GlitchTransaction
@@ -50,7 +74,7 @@ public class Options : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-       
+        UpdateSettings();
     }
 }
 
