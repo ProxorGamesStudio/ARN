@@ -18,7 +18,6 @@ public class Localisation : MonoBehaviour
         public string id;
         public string[] localiztionStrings;
     }
-
     public string Language;
     byte currentLanguage;
     List<string> lang_ids = new List<string>();
@@ -26,12 +25,12 @@ public class Localisation : MonoBehaviour
     public UnityEngine.Object LocalizationDB;
     Text[] texts;
     List<Text> Texts = new List<Text>();
-
+    
     public void Awake()
     {
-        texts = FindObjectsOfType<Text>();
+        texts = Resources.FindObjectsOfTypeAll<Text>();
         for (int i = 0; i < texts.Length; i++)
-            if (texts[i].text.ToCharArray()[0] == '#')
+            if (texts[i].text.Length > 0 && texts[i].text.ToCharArray()[0] == '#')
                 Texts.Add(texts[i]);
         texts = null;
                 string filePath = AssetDatabase.GetAssetPath(LocalizationDB);
