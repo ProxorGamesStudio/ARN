@@ -58,38 +58,40 @@ public class MainMenu : MonoBehaviour
 
     public void SetPage(int page)
     {
-        CurrentPageRect = MenuPages[CurrentPage];
-        if (page != CurrentPage)
+        if (!(changePage && page == CurrentPage))
         {
-            int dir = ButtonsSelect[CurrentPage].position.x < ButtonsSelect[page].position.x ? 1 : -1;
-            directionChangePage = dir;
-            CurrentPage = page;
-            SetChangePage(dir);
-            changePage = true;
-        }
+            CurrentPageRect = MenuPages[CurrentPage];
+            if (page != CurrentPage)
+            {
+                int dir = ButtonsSelect[CurrentPage].position.x < ButtonsSelect[page].position.x ? 1 : -1;
+                directionChangePage = dir;
+                CurrentPage = page;
+                SetChangePage(dir);
+                changePage = true;
+            }
 
-        float size = 0;
-        switch (page)
-        {
-            case 0:
-                ShowHome();
-                size = ButtonsSelect[page].sizeDelta.x;
-                break;
-            case 4:
-                size = 240;
-                ShowCredits();
-                break;
-            case 5:
-                size = ButtonsSelect[page].sizeDelta.x;
-                ShowEmpty();
-                break;
-            default:
-                ShowEmpty();
-                size = 240;
-                break;
+            float size = 0;
+            switch (page)
+            {
+                case 0:
+                    ShowHome();
+                    size = ButtonsSelect[page].sizeDelta.x;
+                    break;
+                case 4:
+                    size = 240;
+                    ShowCredits();
+                    break;
+                case 5:
+                    size = ButtonsSelect[page].sizeDelta.x;
+                    ShowEmpty();
+                    break;
+                default:
+                    ShowEmpty();
+                    size = 240;
+                    break;
+            }
+            MoveSelector(ButtonsSelect[page].position.x, size);
         }
-        MoveSelector(ButtonsSelect[page].position.x, size);
-
     }
 
     public void MoveSelector(float pos, float size) //move down line of select in menu
