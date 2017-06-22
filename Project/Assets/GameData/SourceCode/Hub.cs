@@ -9,8 +9,19 @@ public class Hub : MonoBehaviour {
     public int Level = 1;
     public enum type { Common, Scientific, Millitary, Commercial, Goverment }
     public type Type;
-    //[HideInInspector]
+    [HideInInspector]
     public GameObject[] lines;
-   // [HideInInspector]
+    [HideInInspector]
     public GameObject[] links;
+
+    void Start()
+    {
+        SwitchLanguage();
+    }
+
+    public void SwitchLanguage()
+    {
+        Name = FindObjectOfType<Localisation>().GetLocalizationString(Name);
+    }
+
 }

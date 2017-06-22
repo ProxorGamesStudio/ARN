@@ -19,6 +19,9 @@ public class MainMenu : MonoBehaviour
     public RawImage logo;
     public float speedLogoShow, speedCreditsShow;
     Color logoAlpha, creditsAlpha;
+    bool oneClick, slide;
+    Options options { get { return GetComponent<Options>(); } set { value = GetComponent<Options>(); } }
+
     void Start()
     {
         logoAlpha = Color.white;
@@ -37,6 +40,7 @@ public class MainMenu : MonoBehaviour
     {
         UpdateSelector();
         UpdateAlpha();
+        InputUpdate();
         if (changePage)
             ChangePage(directionChangePage);
     }
@@ -162,6 +166,30 @@ public class MainMenu : MonoBehaviour
     public void Quit()
     {
         Application.Quit();
+    }
+
+    void InputUpdate()
+    {
+
+        if (Input.touchCount > 0)
+        {
+            if (Input.GetTouch(0).phase == TouchPhase.Ended)
+                slide = false;
+            if (!slide && Input.GetTouch(0).phase == TouchPhase.Moved && (Input.GetTouch(0).deltaPosition.x < -30f && CurrentPage < MenuPages.Length - 1 || Input.GetTouch(0).deltaPosition.x > 30f && CurrentPage > 0))
+            {
+                ButtonsSelect[CurrentPage += Input.GetTouch(0).deltaPosition.x > 0 ? -1 : 1].GetComponent<Toggle>().isOn = true;
+                ButtonsSelect[CurrentPage].GetComponent<Toggle>().isOn = false;
+                slide = true;
+            }
+        }
+        else
+        {
+            if (Input.GetKeyDown(options.settings.controls.controls.GetButton("RightArrow")) && CurrentPage < MenuPages.Length - 1 || Input.GetKeyDown(options.settings.controls.controls.GetButton("LeftArrow")) && CurrentPage > 0)
+            {
+                ButtonsSelect[CurrentPage += Input.GetKeyDown(options.settings.controls.controls.GetButton("RightArrow")) ? 1 : Input.GetKeyDown(options.settings.controls.controls.GetButton("LeftArrow")) ? -1 : 0].GetComponent<Toggle>().isOn = true;
+                ButtonsSelect[CurrentPage].GetComponent<Toggle>().isOn = false;
+            }
+        }
     }
 
 }

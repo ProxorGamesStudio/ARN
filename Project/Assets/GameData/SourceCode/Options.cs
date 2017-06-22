@@ -8,7 +8,7 @@ public class Options : MonoBehaviour {
 
     [HideInInspector]
     public int currentSettingWindow;
-    public Settings settings;
+    public Settings settings = new Settings();
     public Dropdown Language, windowsMode, vsync, resolution, graphicsQuality;
     public Slider brightness;
     public Localisation localisation;
@@ -132,5 +132,12 @@ public class Controller
     {
         Buttons.Add(new Button("Escape", KeyCode.Escape));
         Buttons.Add(new Button("Mouse 1", KeyCode.Mouse1));
+        Buttons.Add(new Button("RightArrow", KeyCode.RightArrow));
+        Buttons.Add(new Button("LeftArrow", KeyCode.LeftArrow));
+    }
+
+    public KeyCode GetButton(string keycode)
+    {
+        return Buttons.Find(x => x.name == keycode).key;
     }
 }

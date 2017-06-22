@@ -21,7 +21,7 @@ public class Localisation : MonoBehaviour
     public string Language;
     byte currentLanguage;
     List<string> lang_ids = new List<string>();
-    List<Word> words = new List<Word>();
+    public List<Word> words = new List<Word>();
     public UnityEngine.Object LocalizationDB;
     Text[] texts;
     List<Text> Texts = new List<Text>();
@@ -31,7 +31,7 @@ public class Localisation : MonoBehaviour
     {
         texts = Resources.FindObjectsOfTypeAll<Text>();
         for (int i = 0; i < texts.Length; i++)
-            if (texts[i].text.Length > 0 && texts[i].text.ToCharArray()[0] == '#')
+            if (texts[i].text.Length > 0 && texts[i].text.Trim()[0] == '#')
                 Texts.Add(texts[i]);
         texts = null;
                 string filePath = AssetDatabase.GetAssetPath(LocalizationDB);
@@ -48,7 +48,7 @@ public class Localisation : MonoBehaviour
             }
             ISheet sheet = book.GetSheetAt(0);
             for(byte i = 1; sheet.GetRow(0).GetCell(i).ToString() != "Описание"; i++)
-            lang_ids.Add(sheet.GetRow(2).GetCell(i).ToString());
+                lang_ids.Add(sheet.GetRow(2).GetCell(i).ToString());
             for (int i = 3, k = 0; sheet.GetRow(i) != null && sheet.GetRow(i).GetCell(0).ToString() != string.Empty; i++)
             {
                 Word word = new Word();
@@ -89,12 +89,13 @@ public class Localisation : MonoBehaviour
     public string GetLocalizationString(string id)
     {
 
-        int index = words.FindIndex(x => x.id == id);
+        int index = words.FindIndex(x => x.id.Trim() == id.Trim());
         if (index >= 0)
             return words[index].localiztionStrings[currentLanguage];
         else
             return id;
     }
+
 }
 
 
