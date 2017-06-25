@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using ProxorGamesLocalisation;
 
 public class Hub : MonoBehaviour {
     

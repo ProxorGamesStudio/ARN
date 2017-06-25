@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using UnityEngine.UI;
+using ProxorGamesLocalisation;
 
 public class Options : MonoBehaviour {
 
