@@ -21,6 +21,7 @@ public class Localisation : MonoBehaviour
     public string Language;
     byte currentLanguage;
     List<string> lang_ids = new List<string>();
+    [HideInInspector]
     public List<Word> words = new List<Word>();
     public UnityEngine.Object LocalizationDB;
     Text[] texts;
@@ -35,37 +36,45 @@ public class Localisation : MonoBehaviour
                 Texts.Add(texts[i]);
         texts = null;
                 string filePath = AssetDatabase.GetAssetPath(LocalizationDB);
-        string fileName = Path.GetFileNameWithoutExtension(filePath);
-        using (FileStream stream = File.Open(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+        try
         {
-            IWorkbook book = null;
-            if (Path.GetExtension(filePath) == ".xls")
+            string fileName = Path.GetFileNameWithoutExtension(filePath);
+            using (FileStream stream = File.Open(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {
-                book = new HSSFWorkbook(stream);
+                IWorkbook book = null;
+                if (Path.GetExtension(filePath) == ".xls")
+                {
+                    book = new HSSFWorkbook(stream);
+                }
+                else
+                {
+                    book = new XSSFWorkbook(stream);
+                }
+                ISheet sheet = book.GetSheetAt(0);
+                for (byte i = 1; sheet.GetRow(0).GetCell(i).ToString() != "Описание"; i++)
+                    lang_ids.Add(sheet.GetRow(2).GetCell(i).ToString());
+                for (int i = 3, k = 0; sheet.GetRow(i) != null && sheet.GetRow(i).GetCell(0).ToString() != string.Empty; i++)
+                {
+                    Word word = new Word();
+                    word.id = sheet.GetRow(i).GetCell(0).ToString();
+                    word.localiztionStrings = new string[lang_ids.Count];
+                    for (k = 0; k < lang_ids.Count; k++)
+                        word.localiztionStrings[k] = sheet.GetRow(i).GetCell(1 + k).ToString();
+                    words.Add(word);
+                }
             }
-            else {
-                book = new XSSFWorkbook(stream);
-            }
-            ISheet sheet = book.GetSheetAt(0);
-            for(byte i = 1; sheet.GetRow(0).GetCell(i).ToString() != "Описание"; i++)
-                lang_ids.Add(sheet.GetRow(2).GetCell(i).ToString());
-            for (int i = 3, k = 0; sheet.GetRow(i) != null && sheet.GetRow(i).GetCell(0).ToString() != string.Empty; i++)
+            for (byte i = 0; i < lang_ids.Count; i++)
+                if (Language == lang_ids[i])
+                    currentLanguage = i;
+            for (int i = 0; i < Texts.Count; i++)
             {
-                Word word = new Word();
-                word.id = sheet.GetRow(i).GetCell(0).ToString();
-                word.localiztionStrings = new string[lang_ids.Count];
-                for (k = 0; k < lang_ids.Count; k++)
-                    word.localiztionStrings[k] = sheet.GetRow(i).GetCell(1 + k).ToString();
-                words.Add(word);
+                Texts[i].gameObject.name = Texts[i].text;
+                Texts[i].text = GetLocalizationString(Texts[i].text);
             }
         }
-        for (byte i = 0; i < lang_ids.Count; i++)
-            if (Language == lang_ids[i])
-                currentLanguage = i;
-        for (int i = 0; i < Texts.Count; i++)
+        catch
         {
-            Texts[i].gameObject.name = Texts[i].text;
-            Texts[i].text = GetLocalizationString(Texts[i].text);
+            print("Could not open file");
         }
     }
 
