@@ -68,15 +68,12 @@ public class Options : MonoBehaviour {
         settings.general.Language = Language.options[Language.value].text;
     }
 
-  //  IEnumerator GlitchTransaction
-   // {
-//
-  //  }
-	
 	// Update is called once per frame
 	void Update () {
         UpdateSettings();
     }
+
+
 }
 
 [Serializable]
