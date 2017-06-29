@@ -18,34 +18,6 @@ namespace ProxorNetwork
                 return new Color(inputColor.r, inputColor.g, inputColor.b, 1);
             }
         }
-
-        public struct Display
-        {
-            public static void SetupFactors(Vector2[] vectors, ref Pair<float, float>[] factors)
-            {
-                for (int i = 0; i < vectors.Length; i++)
-                {
-                    factors[i] = new Pair<float, float>();
-                    factors[i].First = Screen.width / vectors[i].x;
-                    factors[i].Second = Screen.height / vectors[i].y;
-                }
-            }
-
-            public static Vector2 Update(Vector2 inputScreenSize)
-            {
-                return new Vector2(Screen.width / inputScreenSize.x, Screen.height / inputScreenSize.y);
-            }
-
-            public unsafe static void ChangeUI(ref Vector2[] start, ref Vector2[] target, ref Pair<float, float>[] factors)
-            {
-                for(int i = 0; i < start.Length; i++)
-                {
-                    start[i] = Update(new Vector2(factors[i].First, factors[i].Second));
-                    target[i] = new Vector2(Screen.width/factors[i].First, Screen.height/factors[i].Second);
-                }
-            }
-        }
-
     }
 
     public class Pair<T, U>

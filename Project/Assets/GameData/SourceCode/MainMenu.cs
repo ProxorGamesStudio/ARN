@@ -34,6 +34,7 @@ public class MainMenu : MonoBehaviour
         }
         foreach (Image img in MenuPages[4].GetComponentsInChildren<Image>())
             img.color = new Color(img.color.r, img.color.g, img.color.b, 0);
+  
     }
 
     private void Update()
@@ -47,9 +48,10 @@ public class MainMenu : MonoBehaviour
 
     void UpdateSelector()
     {
-        Selector.position = new Vector2(Mathf.Lerp(Selector.position.x, SelectorPos, SelectorSpeed * Time.deltaTime), Selector.position.y);
+        Selector.position = new Vector2(Mathf.Lerp(Selector.position.x, ButtonsSelect[CurrentPage].position.x, SelectorSpeed * Time.deltaTime), Selector.position.y);
         Selector.sizeDelta = new Vector2(Mathf.Lerp(Selector.sizeDelta.x, SelectorSize, SelectorSpeed * Time.deltaTime), Selector.sizeDelta.y);
     }
+
 
     void UpdateAlpha()
     {

@@ -23,9 +23,7 @@ public class ProcedureOptionsAnimation : MonoBehaviour {
     #region params
     bool mode = false;          //0 - BigPic, 1 - StandartPic
     Vector2 iconTargetPosition, iconTargetSize, buttonsTargetSize;
-    Vector2 startScreenSize;
 
-    ProxorNetwork.Pair<float, float>[] factors = new ProxorNetwork.Pair<float, float>[4];
     #endregion
 
 
@@ -34,37 +32,19 @@ public class ProcedureOptionsAnimation : MonoBehaviour {
       
         mainTextStartColor = mainText.color;
 
-        iconTargetPosition = mainText.rectTransform.position;
-        iconStartPosition = iconSettings.position;
+        iconTargetPosition = iconSettings.InverseTransformPoint(mainText.rectTransform.position);
+        iconStartPosition = iconSettings.localPosition;
         iconStartSize = iconSettings.sizeDelta;
         iconTargetSize = iconSettings.sizeDelta * iconFactor;
         buttonsStartSize = Buttons.localScale;
         buttonsTargetSize = new Vector3(0.12f, 0.12f, 0);
-
-        ProxorEngine.Display.SetupFactors(
-             new Vector2[] {  iconStartPosition, iconStartSize, buttonsStartSize },
-             ref factors
-      );
-        FindObjectOfType<GameManager>().Scripts.Add(this);
-        ChangeScreen();
-    }
-
-    void ChangeScreen()
-    {
-       // FindObjectOfType<CanvasScaler>().referenceResolution = new Vector2(Screen.width, Screen.height);
-        iconStartPosition = iconStartPosition * FindObjectOfType<CanvasScaler>().scaleFactor;
-    }
-
-    void AcceptScreenChanges(Vector2[] temp)
-    {
-        iconStartPosition = temp[0];
     }
 
     // Update is called once per frame
     void Update () {
         if (!mode)  BigPictureMode();
         else        StandartPictureMode();
-        Buttons.position = iconSettings.position;
+        Buttons.localPosition = iconSettings.localPosition;
 	}
 
     public void ResetMode()
@@ -75,7 +55,7 @@ public class ProcedureOptionsAnimation : MonoBehaviour {
     public void BigPictureMode()
     {
         mainText.color = Color.Lerp(mainText.color, mainTextStartColor, speed * Time.deltaTime);
-        iconSettings.position = Vector2.Lerp(iconSettings.position, iconStartPosition, speed * Time.deltaTime);
+        iconSettings.localPosition = Vector2.Lerp(iconSettings.localPosition, iconStartPosition, speed * Time.deltaTime);
         iconSettings.sizeDelta = Vector2.Lerp(iconSettings.sizeDelta, iconStartSize, speed * Time.deltaTime);
         RotateSettingIcon((-iconSettings.sizeDelta.x + iconStartSize.x)/1.3f);
         Buttons.localScale = Vector3.Lerp(Buttons.localScale, buttonsStartSize, speed * Time.deltaTime);
@@ -88,7 +68,7 @@ public class ProcedureOptionsAnimation : MonoBehaviour {
     public void StandartPictureMode()
     {
         mainText.color = Color.Lerp(mainText.color, ProxorEngine.Colors.ColorNonAlpha(mainText.color), speed * Time.deltaTime);
-        iconSettings.position = Vector2.Lerp(iconSettings.position, iconTargetPosition, speed * Time.deltaTime);
+        iconSettings.localPosition = Vector2.Lerp(iconSettings.localPosition, iconTargetPosition, speed * Time.deltaTime);
         iconSettings.sizeDelta = Vector2.Lerp(iconSettings.sizeDelta, iconTargetSize, speed * Time.deltaTime);
         RotateSettingIcon((iconTargetSize.x - iconSettings.sizeDelta.x)/1.3f);
         Buttons.localScale = Vector3.Lerp(Buttons.localScale,buttonsTargetSize, speed * Time.deltaTime);
