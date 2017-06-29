@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class TheCamera : MonoBehaviour {
 
-    public Transform axisX, axisY;
+    Transform axisX, axisY;
     public float speed, smooth, MaxRot = 90, zoomSpeed = 1, zoomSensivity = 10;
     public bool invert;
     float rotX, rotY, asymptote,  _x, _z, _ux, _uScale, _uA = 1;
@@ -14,6 +14,9 @@ public class TheCamera : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
+        axisX = new GameObject("AxisX").transform;
+        axisY = new GameObject("AxisY").transform;
+        axisX.rotation = axisY.rotation = transform.rotation;
         transform.parent = axisX;
         axisX.parent = axisY;
         _x = transform.localPosition.x;

@@ -9,10 +9,15 @@ public class GameManager : MonoBehaviour {
     public WeAre weAre;
     public int Money, Information, Research;
     public Text moneyUI, informationUI, researchUI;
-   
+    [HideInInspector]
+    public List<MonoBehaviour> Scripts;
+    #region params
+    Vector2 screenSize;
+    #endregion
+
     // Use this for initialization
     void Start () {
-		
+        screenSize = new Vector2(Screen.width, Screen.height);
 	}
 	
 	// Update is called once per frame
@@ -21,4 +26,10 @@ public class GameManager : MonoBehaviour {
         informationUI.text = Information.ToString();
         researchUI.text = Research.ToString();
 	}
+
+    void CheckScreenChange()
+    {
+        foreach(MonoBehaviour script in Scripts)
+            script.Invoke("ChangeScreen", 0);
+    }
 }
