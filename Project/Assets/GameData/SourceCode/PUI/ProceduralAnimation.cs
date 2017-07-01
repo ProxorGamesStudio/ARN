@@ -43,7 +43,8 @@ public class ProceduralAnimation : MonoBehaviour
     #endregion
 
     #region callbacks varablies
-    int nowSelect;
+    [HideInInspector]
+    public int nowSelect;
     #endregion
 
     private void Awake()

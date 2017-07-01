@@ -9,7 +9,7 @@ public class ProcedureOptionsAnimation : MonoBehaviour {
     const float discrepancy = 0.1f;
 
     public Text mainText;
-    public RectTransform iconSettings, Buttons, AcceptButton, CancelButton;
+    public RectTransform iconSettings, Buttons, AcceptButton, CancelButton, Line, Target;
 
     [Range(0, 10)]
     public float speed;
@@ -17,13 +17,14 @@ public class ProcedureOptionsAnimation : MonoBehaviour {
     public float iconFactor = 0.43f;
     #region start params
     Color mainTextStartColor;
-    Vector2 iconStartPosition, iconStartSize, buttonsStartSize;
+    Vector2 iconStartPosition, iconStartSize, buttonsStartSize, AcceptButtonStartPos, CancelButtonStartPos, LineStartPos;
     #endregion
 
     #region params
     bool mode = false;          //0 - BigPic, 1 - StandartPic
-    Vector2 iconTargetPosition, iconTargetSize, buttonsTargetSize;
-
+    Vector2 iconTargetPosition, iconTargetSize, buttonsTargetSize, AcceptButtonTargetPos, CancelButtonTargetPos, LineTargetPos;
+    Transform[] childs = new Transform[4];
+    int clicked;
     #endregion
 
 
@@ -38,6 +39,18 @@ public class ProcedureOptionsAnimation : MonoBehaviour {
         iconTargetSize = iconSettings.sizeDelta * iconFactor;
         buttonsStartSize = Buttons.localScale;
         buttonsTargetSize = new Vector3(0.12f, 0.12f, 0);
+        AcceptButtonStartPos = AcceptButton.localPosition + new Vector3(280, 0, 0);
+        AcceptButtonTargetPos = AcceptButton.localPosition;
+        CancelButtonStartPos = CancelButton.localPosition - new Vector3(280, 0, 0);
+        CancelButtonTargetPos = CancelButton.localPosition;
+        LineStartPos = Line.localPosition;
+        LineTargetPos = new Vector3(0,-155);
+        for (int i = 0; i < Line.GetChild(0).childCount; i++)
+        {
+            childs[i] = Line.GetChild(0).GetChild(i);
+            foreach (Text txt in childs[i].GetComponentsInChildren<Text>())
+                txt.color = ProxorEngine.Colors.ColorNonAlpha(txt.color);
+        }
     }
 
     // Update is called once per frame
@@ -45,6 +58,7 @@ public class ProcedureOptionsAnimation : MonoBehaviour {
         if (!mode)  BigPictureMode();
         else        StandartPictureMode();
         Buttons.localPosition = iconSettings.localPosition;
+        clicked = GetComponentInChildren<ProceduralAnimation>().nowSelect;
 	}
 
     public void ResetMode()
@@ -63,6 +77,26 @@ public class ProcedureOptionsAnimation : MonoBehaviour {
             if (img.transform.parent != Buttons.transform)
                 img.color = Color.Lerp(img.color, ProxorEngine.Colors.DefalutColor(img.color), speed * Time.deltaTime);
         iconSettings.GetComponent<Button>().interactable = false;
+        AcceptButton.localPosition = Vector3.Lerp(AcceptButton.localPosition, AcceptButtonStartPos, speed * 1.5f * Time.deltaTime);
+        AcceptButton.GetComponent<Button>().enabled = false;
+        AcceptButton.GetComponent<Image>().color = Color.Lerp(AcceptButton.GetComponent<Image>().color, ProxorEngine.Colors.ColorNonAlpha(AcceptButton.GetComponent<Image>().color), speed * Time.deltaTime);
+        AcceptButton.GetComponentInChildren<Text>().color = Color.Lerp(AcceptButton.GetComponentInChildren<Text>().color, ProxorEngine.Colors.ColorNonAlpha(AcceptButton.GetComponentInChildren<Text>().color), speed  * Time.deltaTime);
+
+        CancelButton.localPosition = Vector3.Lerp(CancelButton.localPosition, CancelButtonStartPos, speed * 1.5f * Time.deltaTime);
+        CancelButton.GetComponent<Button>().enabled = true;
+        CancelButton.GetComponent<Image>().color = Color.Lerp(CancelButton.GetComponent<Image>().color, ProxorEngine.Colors.ColorNonAlpha(CancelButton.GetComponent<Image>().color), speed * Time.deltaTime);
+        CancelButton.GetComponentInChildren<Text>().color = Color.Lerp(CancelButton.GetComponentInChildren<Text>().color, ProxorEngine.Colors.ColorNonAlpha(CancelButton.GetComponentInChildren<Text>().color), speed * Time.deltaTime);
+
+
+       
+        for (int i = 0; i < Line.GetChild(0).childCount; i++)
+        {
+            Line.localPosition = Vector3.Lerp(Line.localPosition, LineStartPos, (speed * 1.5f * Time.deltaTime) / Line.GetChild(0).childCount);
+            foreach (Text txt in childs[i].GetComponentsInChildren<Text>())
+                txt.color = Color.Lerp(txt.color, ProxorEngine.Colors.ColorNonAlpha(txt.color), speed / 2.25f * Time.deltaTime);
+            childs[i].position = Target.position;
+        }
+        childs[clicked].position = Target.position;
     }
 
     public void StandartPictureMode()
@@ -71,11 +105,27 @@ public class ProcedureOptionsAnimation : MonoBehaviour {
         iconSettings.localPosition = Vector2.Lerp(iconSettings.localPosition, iconTargetPosition, speed * Time.deltaTime);
         iconSettings.sizeDelta = Vector2.Lerp(iconSettings.sizeDelta, iconTargetSize, speed * Time.deltaTime);
         RotateSettingIcon((iconTargetSize.x - iconSettings.sizeDelta.x)/1.3f);
-        Buttons.localScale = Vector3.Lerp(Buttons.localScale,buttonsTargetSize, speed * Time.deltaTime);
+        Buttons.localScale = Vector3.Lerp(Buttons.localScale,buttonsTargetSize, speed * 1.4f * Time.deltaTime);
         foreach (Image img in Buttons.GetComponentsInChildren<Image>())
            if(img.transform.parent != Buttons.transform)
                img.color = Color.Lerp(img.color, ProxorEngine.Colors.ColorNonAlpha(img.color), speed * Time.deltaTime);
         iconSettings.GetComponent<Button>().interactable = true;
+        AcceptButton.localPosition = Vector3.Lerp(AcceptButton.localPosition, AcceptButtonTargetPos, speed * Time.deltaTime);
+        AcceptButton.GetComponent<Button>().enabled = true;
+        AcceptButton.GetComponent<Image>().color = Color.Lerp(AcceptButton.GetComponent<Image>().color, ProxorEngine.Colors.DefalutColor(AcceptButton.GetComponent<Image>().color), speed / 2 * Time.deltaTime);
+        AcceptButton.GetComponentInChildren<Text>().color = Color.Lerp(AcceptButton.GetComponentInChildren<Text>().color, ProxorEngine.Colors.DefalutColor(AcceptButton.GetComponentInChildren<Text>().color), speed / 2 * Time.deltaTime);
+
+        CancelButton.localPosition = Vector3.Lerp(CancelButton.localPosition, CancelButtonTargetPos, speed * Time.deltaTime);
+        CancelButton.GetComponent<Button>().enabled = true;
+        CancelButton.GetComponent<Image>().color = Color.Lerp(CancelButton.GetComponent<Image>().color, ProxorEngine.Colors.DefalutColor(CancelButton.GetComponent<Image>().color), speed / 2  * Time.deltaTime);
+        CancelButton.GetComponentInChildren<Text>().color = Color.Lerp(CancelButton.GetComponentInChildren<Text>().color, ProxorEngine.Colors.DefalutColor(CancelButton.GetComponentInChildren<Text>().color), speed / 2 * Time.deltaTime);
+
+       
+        Line.localPosition = Vector3.Lerp(Line.localPosition, LineTargetPos, speed * 1.4f * Time.deltaTime);
+        childs[clicked].position = Target.position;
+
+        foreach (Text txt in childs[clicked].GetComponentsInChildren<Text>())
+            txt.color = Color.Lerp(txt.color, ProxorEngine.Colors.DefalutColor(txt.color), speed/1.5f * Time.deltaTime);
     }
 
   
