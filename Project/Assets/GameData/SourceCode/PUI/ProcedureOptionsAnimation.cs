@@ -29,12 +29,13 @@ public class ProcedureOptionsAnimation : MonoBehaviour {
     Transform[] childs = new Transform[4];
     int clicked;
     bool change;
+    Options options;
     #endregion
 
     
 
     void Start () {
-      
+        options = FindObjectOfType<Options>();
         mainTextStartColor = mainText.color;
         iconTargetPosition = iconSettings.InverseTransformPoint(mainText.rectTransform.position);
         iconStartPosition = iconSettings.localPosition;
@@ -62,6 +63,8 @@ public class ProcedureOptionsAnimation : MonoBehaviour {
         else        StandartPictureMode();
         Buttons.localPosition = iconSettings.localPosition;
         clicked = GetComponentInChildren<ProceduralAnimation>().nowSelect;
+        if (Input.GetKeyDown(options.settings.controls.controls.GetButton("Escape")))
+            mode = false;
 	}
 
     public void ResetMode()

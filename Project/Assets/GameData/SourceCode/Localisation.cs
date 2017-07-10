@@ -17,14 +17,13 @@ namespace ProxorGamesLocalisation
             public string[] localiztionStrings;
         }
 
-
+        [HideInInspector]
         public string Language;
         byte currentLanguage;
         [HideInInspector]
         public List<string> lang_ids = new List<string>();
         [HideInInspector]
         public List<Word> words = new List<Word>();
-        public UnityEngine.Object LocalizationDB;
         Text[] texts;
         List<Text> Texts = new List<Text>();
         List<string> Text_data = new List<string>();
