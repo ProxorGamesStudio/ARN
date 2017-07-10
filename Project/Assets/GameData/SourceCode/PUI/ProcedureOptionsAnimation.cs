@@ -122,6 +122,7 @@ public class ProcedureOptionsAnimation : MonoBehaviour {
         #region once
         if (!change)
         {
+          
             iconSettings.GetComponent<Button>().interactable = true;
             AcceptButton.GetComponent<Button>().enabled = true;
             CancelButton.GetComponent<Button>().enabled = true;
@@ -138,6 +139,16 @@ public class ProcedureOptionsAnimation : MonoBehaviour {
         #endregion
 
         #region update
+        for (int i = 0; i < Line.GetChild(0).childCount; i++)
+        {
+            if (i != clicked)
+            {
+                foreach (Text txt in childs[i].GetComponentsInChildren<Text>())
+                    txt.color = ProxorEngine.Colors.ColorNonAlpha(txt.color);
+                foreach (Image img in childs[i].GetComponentsInChildren<Image>())
+                    img.color = ProxorEngine.Colors.ColorNonAlpha(img.color);
+            }
+        }
         mainText.color = Color.Lerp(mainText.color, ProxorEngine.Colors.ColorNonAlpha(mainText.color), speed * Time.deltaTime);
         iconSettings.localPosition = Vector2.Lerp(iconSettings.localPosition, iconTargetPosition, speed * Time.deltaTime);
         iconSettings.sizeDelta = Vector2.Lerp(iconSettings.sizeDelta, iconTargetSize, speed * Time.deltaTime);
