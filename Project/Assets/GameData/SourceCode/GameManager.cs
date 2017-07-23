@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour {
     public Text moneyUI, informationUI, researchUI;
     [HideInInspector]
     public List<MonoBehaviour> Scripts;
+    public int Defucult;
     #region params
     Vector2 screenSize;
     #endregion

@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class TheCamera : MonoBehaviour {
 
     Transform axisX, axisY;
-    public float speed, smooth, MaxRot = 90, zoomSpeed = 1, zoomSensivity = 10;
+    public float speed, smooth, MaxRot = 90, zoomSpeed = 1, zoomSensivity = 10, sensivity;
     public bool invert;
     float rotX, rotY, asymptote,  _x, _z, _ux, _uScale, _uA = 1;
     public RectTransform EarthUI;
@@ -31,11 +31,11 @@ public class TheCamera : MonoBehaviour {
         if (Input.GetMouseButton(1))
         {
             if (invert)
-                rotX = Mathf.Lerp(rotX, speed * Time.deltaTime * Input.GetAxis("Mouse Y"), smooth * Time.deltaTime);
+                rotX = Mathf.Lerp(rotX, speed * sensivity * Time.deltaTime * Input.GetAxis("Mouse Y"), smooth * Time.deltaTime);
             else
-                rotX = Mathf.Lerp(rotX, -speed * Time.deltaTime * Input.GetAxis("Mouse Y"), smooth * Time.deltaTime);
+                rotX = Mathf.Lerp(rotX, -speed * sensivity * Time.deltaTime * Input.GetAxis("Mouse Y"), smooth * Time.deltaTime);
 
-            rotY = Mathf.Lerp(rotY, speed * Time.deltaTime * Input.GetAxis("Mouse X"), smooth * Time.deltaTime);
+            rotY = Mathf.Lerp(rotY, speed * sensivity * Time.deltaTime * Input.GetAxis("Mouse X"), smooth * Time.deltaTime);
         }
         else
         {

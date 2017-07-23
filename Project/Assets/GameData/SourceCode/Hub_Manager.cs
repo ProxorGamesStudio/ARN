@@ -98,19 +98,15 @@ public class Hub_Manager : MonoBehaviour {
 
     void SelectorControl()
     {
-        hint.transform.LookAt(mCam.transform);
+     //   hint.transform.LookAt(mCam.transform);
       //  hint.transform.position = halo.transform.position;
     }
 
     void Hint()
     {
         if (on)
-        {
-            if (opacity < 1)
-                opacity += speedOpadcityPlus;
-        }
+            opacity = Mathf.MoveTowards(opacity, 1, speedOpadcityPlus);
         else
-            if (opacity > 0)
-            opacity -= speedOpadcityMinus;
+            opacity = Mathf.MoveTowards(opacity, 0, speedOpadcityMinus);
     }
 }

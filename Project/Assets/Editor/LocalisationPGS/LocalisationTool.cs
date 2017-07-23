@@ -12,6 +12,7 @@ using System;
 using UnityEngine.UI;
 using ProxorGamesLocalisation;
 
+[Serializable]
 public class LocalisationTool4 : EditorWindow
 {
     [SerializeField]
@@ -28,14 +29,16 @@ public class LocalisationTool4 : EditorWindow
     {
         var window = EditorWindow.GetWindow(typeof(LocalisationTool4));
         window.position = new Rect(200, 150, 1000, 870);
+        window.ShowUtility();
         window.title = "Localisation";
     }
 
     void OnGUI()
     {
+        
         GUILayout.BeginVertical();
         GUI.skin.label.fontSize = 20;
-        GUILayout.Label("Proxor Localisation System");
+        GUILayout.Label("Proxor Localisation System v1.1");
         GUI.skin.label.fontSize = 12;
         if (GUILayout.Button("Clear"))
             Clear();
@@ -79,10 +82,10 @@ public class LocalisationTool4 : EditorWindow
                 Localisation.Word word;
                 GUILayout.BeginHorizontal();
                 checkBox[i] = GUILayout.Toggle(checkBox[i], "");
-                word.id = GUILayout.TextField(localisation.words[i].id, GUILayout.Width(300));
+                word.id = EditorGUILayout.TextField(localisation.words[i].id, GUILayout.Width(300));
                 word.localiztionStrings = new string[localisation.lang_ids.Count];
                 for (int k = 0; k < localisation.lang_ids.Count; k++)
-                    word.localiztionStrings[k] = GUILayout.TextField(localisation.words[i].localiztionStrings[k], GUILayout.Width(300));
+                    word.localiztionStrings[k] = EditorGUILayout.TextField(localisation.words[i].localiztionStrings[k], GUILayout.Width(300));
                 localisation.words[i] = word;
                 GUILayout.EndHorizontal();
             }
